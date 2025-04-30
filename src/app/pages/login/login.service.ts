@@ -7,12 +7,14 @@ import { User } from './interfaces/user.interface';
 @Injectable({ providedIn: 'root' })
 export class AuthService {
   private readonly MOCK_USERS: User[] = [
-    { email: 'admin@demo.com', role: 'admin', password: 'admin123' },   
-    { email: 'cliente@demo.com', role: 'cliente', password: 'cliente123',}
+    { email: 'admin@demo.com', role: 'admin', password: 'admin123', name: 'Admin' },   
+    { email: 'cliente@demo.com', role: 'cliente', password: 'cliente123', name : 'José',}
   ];
 
   private readonly _user$ = new BehaviorSubject<User | null>(this.getUserFromStorage());
 
+  constructor() {}
+  
   get user$(): Observable<User | null> {
     return this._user$.asObservable();
   }
@@ -21,13 +23,11 @@ export class AuthService {
     return this._user$.value;
   }
 
-  constructor() {}
 
   login(email: string, password: string): Observable<User> {
-    // Simula validación con delay
-    const user = this.MOCK_USERS.find(u => u.email === email);
+    const user = this.MOCK_USERS.find(u => u.email === email && u.password === password);
+    
     if (user) {
-      // Guardar en localStorage
       localStorage.setItem('user', JSON.stringify(user));
       this._user$.next(user);
       return of(user).pipe(delay(500));

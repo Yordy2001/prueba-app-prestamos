@@ -9,6 +9,7 @@ import { MatInputModule } from '@angular/material/input';
 import { MatButtonModule } from '@angular/material/button';
 import { AuthService } from './login.service';
 import { User } from './interfaces/user.interface';
+import { Router } from '@angular/router';
 
 @Component({
   selector: 'app-login',
@@ -28,6 +29,7 @@ export class LoginComponent implements OnInit {
 
   constructor(
     private loginService: AuthService,
+    private  router: Router,
   ) { }
 
   ngOnInit(): void {
@@ -45,8 +47,8 @@ export class LoginComponent implements OnInit {
 
     this.loginService.login(this.loginFormGroup.value.email, this.loginFormGroup.value.password).subscribe({
       next: (user: User) => {
-        console.log(user);
-
+        
+        this.router.navigate(['/home'])
         this.loginError = false;
       },
       error: (error: any) => {
