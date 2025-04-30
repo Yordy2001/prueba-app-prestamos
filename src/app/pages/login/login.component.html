@@ -1,0 +1,46 @@
+<div class="login-page">
+    <div class="left-site">
+      <h2>Acceder</h2>
+      <form [formGroup]="loginFormGroup">
+        <input
+          type="email"
+          placeholder="Correo"
+          formControlName="email"
+          name="email"
+          required
+        />
+        <div>
+          <p class="msg-error" *ngIf="hasError('email', 'email')">Email invalido</p>
+          <p class="msg-error" *ngIf="hasError('email', 'required')">Campo requerido</p>
+        </div>
+  
+        <input
+          type="password"
+          placeholder="Contraseña"
+          formControlName="password"
+          name="password"
+        />
+        <div>
+          <p class="msg-error" *ngIf="hasError('password', 'required')">Campo requerido</p>
+        </div>
+  
+        <p class="msg-error" *ngIf="loginError">Credenciales invalidas</p>
+        <button mat-raised-button color="primary" (click)="Login()">
+          Acceder
+        </button>
+        <p>¿No tienes cuenta? <a href="/register">Regístrate</a></p>
+      </form>
+    </div>
+    <div class="right-site">
+      <div class="top-rigth-site">
+        <h3>Makers</h3>
+      </div>
+      <div class="img-login">
+        <img
+          src="/finance-svg.svg"
+          alt="svg relacionado con la parte de finanzas"
+        />
+      </div>
+    </div>
+  </div>
+  
