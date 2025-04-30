@@ -1,0 +1,83 @@
+<div class="loan-form-container">
+  <div class="header">
+    <span
+      >Bienvenido,<strong>{{ currentUser?.name }}</strong>
+    </span>
+    <button mat-raised-button color="primary" (click)="openLoanModal()">
+      Solicitar Préstamo
+    </button>
+    <div class="home-header">
+      <button mat-stroked-button color="warn" (click)="logout()">
+        Cerrar sesión
+      </button>
+    </div>
+  </div>
+
+  <div class="solicitudes-list">
+    <mat-card *ngFor="let solicitud of solicitudes">
+      <mat-card-header>
+        <mat-card-title>Solicitud de Préstamo</mat-card-title>
+      </mat-card-header>
+      <mat-card-content>
+        <p><strong>Solicitante:</strong> {{ solicitud.solicitante }}</p>
+        <p><strong>Cantidad:</strong> {{ solicitud.cantidad | currency }}</p>
+        <p><strong>Detalles:</strong> {{ solicitud.detalles }}</p>
+        <p><strong>Estado:</strong> {{ solicitud.estado | uppercase }}</p>
+      </mat-card-content>
+      <mat-card-actions *ngIf="isAdmin">
+        <button mat-button (click)="cambiarEstado(solicitud.id, 'aprobado')">
+          Aprobar
+        </button>
+        <button mat-button (click)="cambiarEstado(solicitud.id, 'rechazado')">
+          Rechazar
+        </button>
+      </mat-card-actions>
+    </mat-card>
+  </div>
+</div>
+
+<ng-template #loanDialog>
+  <h2 mat-dialog-title>Solicitar Préstamo</h2>
+  <mat-dialog-content>
+    <form [formGroup]="formularioPrestamo" (ngSubmit)="submit()">
+      <mat-form-field>
+        <mat-label>Solicitante</mat-label>
+        <input
+          matInput
+          formControlName="solicitante"
+          [value]="currentUser?.email"
+          [disabled]="true"
+        />
+      </mat-form-field>
+
+      <mat-form-field>
+        <mat-label>Cantidad</mat-label>
+        <input matInput formControlName="cantidad" type="number" />
+        <mat-error
+          *ngIf="formularioPrestamo.get('cantidad')?.hasError('required')"
+          >Campo requerido</mat-error
+        >
+        <mat-error *ngIf="formularioPrestamo.get('cantidad')?.hasError('min')"
+          >La cantidad debe ser mayor a 0</mat-error
+        >
+      </mat-form-field>
+
+      <mat-form-field>
+        <mat-label>Detalles</mat-label>
+        <textarea matInput formControlName="detalles"></textarea>
+      </mat-form-field>
+
+      <div mat-dialog-actions>
+        <button mat-button  (click)="cancel()">Cancelar</button>
+        <button
+          mat-raised-button
+          color="primary"
+          type="submit"
+          [disabled]="!formularioPrestamo.valid"
+        >
+          Solicitar
+        </button>
+      </div>
+    </form>
+  </mat-dialog-content>
+</ng-template>
